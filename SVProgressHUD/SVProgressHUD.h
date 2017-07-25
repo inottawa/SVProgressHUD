@@ -130,6 +130,7 @@ typedef void (^SVProgressHUDDismissCompletion)(void);
 
 // shows a image + status, use white PNGs with the imageViewSize (default is 28x28 pt)
 + (void)showImage:(nonnull UIImage*)image status:(nullable NSString*)status;
++ (void)showImage:(nonnull UIImage*)image status:(nullable NSString*)status delay:(NSTimeInterval)delay completion:(nullable SVProgressHUDDismissCompletion)completion;
 + (void)showImage:(nonnull UIImage*)image status:(nullable NSString*)status maskType:(SVProgressHUDMaskType)maskType __attribute__((deprecated("Use showImage:status: and setDefaultMaskType: instead.")));
 
 + (void)setOffsetFromCenter:(UIOffset)offset;

@@ -346,6 +346,10 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     [[self sharedView] showImage:image status:status duration:displayInterval];
 }
 
++ (void)showImage:(nonnull UIImage*)image status:(nullable NSString*)status delay:(NSTimeInterval)delay completion:(nullable SVProgressHUDDismissCompletion)completion {
+    [[self sharedView] showImage:image status:status duration:delay];
+}
+
 + (void)showImage:(UIImage*)image status:(NSString*)status maskType:(SVProgressHUDMaskType)maskType {
     SVProgressHUDMaskType existingMaskType = [self sharedView].defaultMaskType;
     [self setDefaultMaskType:maskType];
@@ -859,7 +863,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     }];
 }
 
-- (void)showImage:(UIImage*)image status:(NSString*)status duration:(NSTimeInterval)duration {
+- (void)showImage:(UIImage*)image status:(NSString*)status duration:(NSTimeInterval)duration completion:(SVProgressHUDDismissCompletion)completion {
     __weak SVProgressHUD *weakSelf = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         __strong SVProgressHUD *strongSelf = weakSelf;
@@ -890,10 +894,14 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
             
             // An image will be dismissed automatically. Therefore, we start a timer
             // which then will call dismiss after the predefined duration
-            strongSelf.fadeOutTimer = [NSTimer timerWithTimeInterval:duration target:strongSelf selector:@selector(dismiss) userInfo:nil repeats:NO];
+            strongSelf.fadeOutTimer = [NSTimer timerWithTimeInterval:duration target:strongSelf selector:@selector(dismiss:) userInfo:@[completion] repeats:NO];
             [[NSRunLoop mainRunLoop] addTimer:strongSelf.fadeOutTimer forMode:NSRunLoopCommonModes];
         }
     }];
+}
+
+- (void)showImage:(UIImage*)image status:(NSString*)status duration:(NSTimeInterval)duration {
+    [self showImage:image status:status duration:duration completion:nil];
 }
 
 - (void)showStatus:(NSString*)status {
@@ -1006,6 +1014,15 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 
 - (void)dismiss {
     [self dismissWithDelay:0.0 completion:nil];
+}
+        
+- (void)dismiss:(NSTimer *)timer {
+    NSArray *userInfo = timer.userInfo;
+    if(userInfo != nil && [userInfo isKindOfClass:NSArray.class]) {
+        [self dismissWithDelay:0.0 completion:userInfo[0]];
+    } else {
+        [self dismissWithDelay:0.0 completion:nil];
+    }
 }
 
 - (void)dismissWithDelay:(NSTimeInterval)delay completion:(SVProgressHUDDismissCompletion)completion {
