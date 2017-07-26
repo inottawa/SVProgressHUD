@@ -347,7 +347,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 }
 
 + (void)showImage:(nonnull UIImage*)image status:(nullable NSString*)status delay:(NSTimeInterval)delay completion:(nullable SVProgressHUDDismissCompletion)completion {
-    [[self sharedView] showImage:image status:status duration:delay];
+    [[self sharedView] showImage:image status:status duration:delay completion:completion];
 }
 
 + (void)showImage:(UIImage*)image status:(NSString*)status maskType:(SVProgressHUDMaskType)maskType {
