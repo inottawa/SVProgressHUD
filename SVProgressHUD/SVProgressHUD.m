@@ -894,7 +894,11 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
             
             // An image will be dismissed automatically. Therefore, we start a timer
             // which then will call dismiss after the predefined duration
-            strongSelf.fadeOutTimer = [NSTimer timerWithTimeInterval:duration target:strongSelf selector:@selector(dismiss:) userInfo:@[completion] repeats:NO];
+            NSArray *userInfo = nil;
+            if (completion != nil) {
+                userInfo = @[completion];
+            }
+            strongSelf.fadeOutTimer = [NSTimer timerWithTimeInterval:duration target:strongSelf selector:@selector(dismiss:) userInfo:userInfo repeats:NO];
             [[NSRunLoop mainRunLoop] addTimer:strongSelf.fadeOutTimer forMode:NSRunLoopCommonModes];
         }
     }];
