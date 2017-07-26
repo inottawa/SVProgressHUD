@@ -347,7 +347,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 }
 
 + (void)showImage:(nonnull UIImage*)image status:(nullable NSString*)status delay:(NSTimeInterval)delay completion:(nullable SVProgressHUDDismissCompletion)completion {
-    [[self sharedView] showImage:image status:status duration:delay completion:completion];
+    [[self sharedView] showImage:image status:status duration:delay];
 }
 
 + (void)showImage:(UIImage*)image status:(NSString*)status maskType:(SVProgressHUDMaskType)maskType {
@@ -877,13 +877,13 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
             [strongSelf cancelIndefiniteAnimatedViewAnimation];
             
             // Update imageView
-            UIColor *tintColor = strongSelf.foregroundColorForStyle;
-            UIImage *tintedImage = image;
-            if (image.renderingMode != UIImageRenderingModeAlwaysTemplate) {
-                tintedImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            }
-            strongSelf.imageView.tintColor = tintColor;
-            strongSelf.imageView.image = tintedImage;
+//            UIColor *tintColor = strongSelf.foregroundColorForStyle;
+//            UIImage *tintedImage = image;
+//            if (image.renderingMode != UIImageRenderingModeAlwaysTemplate) {
+//                tintedImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+//            }
+//            strongSelf.imageView.tintColor = tintColor;
+            strongSelf.imageView.image = image;
             strongSelf.imageView.hidden = NO;
             
             // Update text
